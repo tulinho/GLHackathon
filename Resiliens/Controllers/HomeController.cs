@@ -1,6 +1,11 @@
-﻿using System;
+﻿using iTextSharp.text.pdf;
+using iTextSharp.text.pdf.parser;
+using Resiliens.Entidades;
+using Resiliens.Repositorios;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
@@ -10,21 +15,54 @@ namespace Resiliens.Controllers
     {
         public ActionResult Index()
         {
+            string caminho = "C:\\GLHackathon\\Resources\\peticao1.pdf";
+
+            string textoPeticao = LerArquivoPdf(caminho);
+            Peticao peticao = ProcessarPeticao(textoPeticao);
+            SalvarPeticao(peticao);
             return View();
         }
 
-        public ActionResult About()
+        public string LerArquivoPdf(string caminho)
         {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
+            try
+            {
+                using (PdfReader leitor = new PdfReader(caminho))
+                {
+                    StringBuilder texto = new StringBuilder();
+                    for (int i = 1; i <= leitor.NumberOfPages; i++)
+                    {
+                        texto.Append(PdfTextExtractor.GetTextFromPage(leitor, i));
+                    }
+                    return texto.ToString();
+                }
+            }
+            catch
+            {
+                throw;
+            }
         }
 
-        public ActionResult Contact()
+        private Peticao ProcessarPeticao(string textoPeticao)
         {
-            ViewBag.Message = "Your contact page.";
+            return new Peticao()
+            {
+                CodigoPeticao = "testeCodigoPeticao",
+                Comarca = "testeComarca",
+                CpfReclamante = "testeCpfReclamante",
+                Foro = "testeForo",
+                NaturezaAcao = "testeNaturezaAcao",
+                NaturezaProcesso = "testeNaturezaProcesso",
+                Reclamante = "testeReclamante",
+                Requerido = "testeRequerido"
+            };
+        }
 
-            return View();
+        private void SalvarPeticao(Peticao peticao)
+        {
+            PeticaoRepositorio repositorio = new PeticaoRepositorio();
+
+            repositorio.Inserir(peticao);
         }
     }
 }
