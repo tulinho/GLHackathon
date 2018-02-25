@@ -1,49 +1,8 @@
-﻿@{
-    ViewBag.Title = "Home Page";
-}
-
-<head>
+﻿<head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            debugger;
-            var urlSubmeter = '@Url.Action("SubmeterPdf", "Home")';
-
-            $("#submeter").on("click", function () {
-                debugger;
-                chamadaAjax(urlSubmeter, { arquivo: $("#arquivo").files
-                });
-            });
-
-            function chamadaAjax(url, parametros) {
-
-                $.ajax({
-                    type: "POST",
-                    url: url,
-                    cache: false,
-                    data: JSON.stringify(parametros),
-                    dataType: 'json',
-                    traditional: true,
-                    contentType: 'application/json',
-                    async: false,
-                    beforeSend: function () {
-                    },
-                    complete: function () {
-                    },
-                    success: function (args) {
-                    },
-                    error: function (reqObj, tipoErro, mensagemErro) {
-                    }
-                });
-            }
-        });
-    </script>
 </head>
 
 <div class="row">
-    @*<label>Insira um documento: </label>
-        <input type="file" id="arquivo" />
-        <button id="submeter">Submeter</button>*@
     <div class="row-form">
         <form method="post" action="@Url.Action("SubmeterPdf", "Home")" enctype="multipart/form-data">
             <input type="file" id="arquivo" name="arquivo" />

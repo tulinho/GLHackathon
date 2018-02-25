@@ -19,6 +19,11 @@ namespace Resiliens.Controllers
             return View();
         }
 
+        public ActionResult Listar()
+        {
+            return View("Listar");
+        }
+
         public void SubmeterPdf(HttpPostedFileBase arquivo)
         {
             string textoPeticao = LerArquivoPdf(arquivo);
