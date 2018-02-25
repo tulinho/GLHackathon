@@ -51,11 +51,8 @@ WHERE
             parametros.Add("natureza_acao", peticao.NaturezaAcao, System.Data.DbType.AnsiString);
             parametros.Add("requerido", peticao.Requerido, System.Data.DbType.AnsiString);
 
-            using (SqlConnection conn = new SqlConnection())
+            using (SqlConnection conn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Resiliens"].ToString()))
             {
-                conn.ConnectionString = "Server=localhost;Database=GLHackathon;";
-                conn.Open();
-
                 conn.Execute(INSERIR, parametros);
             }
         }
