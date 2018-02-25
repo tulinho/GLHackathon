@@ -15,5 +15,6 @@ namespace Resiliens.Entidades
         public string NaturezaProcesso { get; set; }
         public string Reclamante { get; set; }
         public string Requerido { get; set; }
+        public string CnpjRequerido { get; set; }
     }
 }

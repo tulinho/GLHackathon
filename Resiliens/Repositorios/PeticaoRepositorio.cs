@@ -20,6 +20,23 @@ values (
 @cod_peticao, @foro, @natureza_processo, @comarca, @reclamante, @cpf_reclamante, @natureza_acao, @requerido
 )";
 
+        private const string LISTAR = @"
+SELECT 
+    cod_peticao AS CodigoPeticao, 
+    foro AS Foro, 
+    natureza_processo AS NaturezaProcesso, 
+    comarca AS Comarca, 
+    reclamante AS Reclamante, 
+    cpf_reclamante AS CpfReclamante, 
+    natureza_acao AS NaturezaAcao, 
+    requerido AS Requerido
+FROM 
+    peticao
+WHERE
+    1=1 AND
+    {0}
+";
+
         #endregion
 
         public void Inserir(Peticao peticao)
@@ -36,10 +53,21 @@ values (
 
             using (SqlConnection conn = new SqlConnection())
             {
-                conn.ConnectionString = "..\\..\\BancoDeDados\\GLHackaton.udb";
+                conn.ConnectionString = "Server=localhost;Database=GLHackathon;";
                 conn.Open();
 
                 conn.Execute(INSERIR, parametros);
+            }
+        }
+
+        public List<Peticao> Listar()
+        {
+            using (SqlConnection conn = new SqlConnection())
+            {
+                conn.ConnectionString = "Server=localhost;Database=GLHackathon;";
+                conn.Open();
+
+                return conn.Query<Peticao>(LISTAR).ToList<Peticao>();
             }
         }
     }
