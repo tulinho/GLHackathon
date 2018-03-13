@@ -203,7 +203,7 @@ namespace Resiliens.Controllers
         {
             string corpoEmail = ObterCorpoEmail();
             Colaborador colaborador = ObterColaboradorResponsavel(peticao.NaturezaAcao);
-            String.Format(corpoEmail, 
+            corpoEmail = String.Format(corpoEmail, colaborador.Nome, DateTime.Now, peticao.NaturezaAcao, peticao.Reclamante, peticao.NaturezaProcesso, peticao.Requerido, peticao.Foro, peticao.Comarca);
         }
 
         private string ObterCorpoEmail()
