@@ -154,12 +154,12 @@ namespace Resiliens.Controllers
 
         private string ExtrairNaturezaProcessoDaPeticao(string textoPeticao)
         {
-            throw new NotImplementedException();
+            return string.Empty; //TODO: pendente implementação
         }
 
         private string ExtrairReclamanteDaPeticao(string textoPeticao)
         {
-            throw new NotImplementedException();
+            return string.Empty; //TODO: pendente implementação
         }
 
         private string ExtrairRequeridoDaPeticao(string textoPeticao)
@@ -210,6 +210,78 @@ namespace Resiliens.Controllers
             PeticaoRepositorio repositorio = new PeticaoRepositorio();
 
             repositorio.Inserir(peticao);
+        }
+
+        private void EnviarEmailNotificacao(Peticao peticao)
+        {
+            string corpoEmail = ObterCorpoEmail();
+            Colaborador colaborador = ObterColaboradorResponsavel(peticao.NaturezaAcao);
+            corpoEmail = String.Format(corpoEmail, colaborador.Nome, DateTime.Now, peticao.NaturezaAcao, peticao.Reclamante, peticao.NaturezaProcesso, peticao.Requerido, peticao.Foro, peticao.Comarca);
+        }
+
+        private string ObterCorpoEmail()
+        {
+            string corpo = @"
+<html>
+<head>
+<style>
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+</style>
+</head>
+
+Prezado(a) {0},
+<br>
+<br>
+A seguinte petição foi processada em {1}, classificada como {2}, e requer sua análise:
+<br>
+<br>
+<table>
+    <tr>
+        <th>Reclamante</th>
+        <th>Natureza Processo</th>
+        <th>Requerido</th>
+        <th>Foro</th>
+        <th>Comarca</th>
+    </tr>
+    <tr>
+        <td>{3}</td>
+        <td>{4}</td>
+        <td>{5}</td>
+        <td>{6}</td>
+        <td>{7}</td>
+    </tr>
+</table>
+<br>
+<br>
+Mais informações a respeito do processo, bem como a documentação completa da petição, podem ser obtidas clicando aqui.
+<br>
+<br>
+Cordialmente,
+<br>
+<br>
+Análise de documentos
+</html>";
+
+            return corpo;
+        }
+
+        private Colaborador ObterColaboradorResponsavel(string naturezaAcao)
+        {
+            throw new NotImplementedException();
         }
     }
 }
