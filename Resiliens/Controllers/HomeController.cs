@@ -1,6 +1,7 @@
 ﻿using iTextSharp.text.pdf;
 using iTextSharp.text.pdf.parser;
 using Resiliens.Entidades;
+using Resiliens.Models;
 using Resiliens.Repositorios;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ namespace Resiliens.Controllers
 {
     public class HomeController : Controller
     {
+        private static ProcessadorDeTexto processador { get; set; }
         public ActionResult Index()
         {
             return View();
@@ -24,11 +26,20 @@ namespace Resiliens.Controllers
             return View("Listar");
         }
 
-        public void SubmeterPdf(HttpPostedFileBase arquivo)
+        public string SubmeterPdf(HttpPostedFileBase[] arquivo)
         {
-            string textoPeticao = LerArquivoPdf(arquivo);
-            Peticao peticao = ProcessarPeticao(textoPeticao);
-            SalvarPeticao(peticao);
+            //string textoPeticao = LerArquivoPdf(arquivo);
+            //if (processador == null)
+            //    processador = new ProcessadorDeTexto(textoPeticao);
+            //else
+            //    processador.Processar(textoPeticao);
+
+            //var media = processador.Paragrafos.Sum(p => p.Peso)/processador.Paragrafos.Count();
+            //string texto = String.Join("<br><br><br>", processador.Paragrafos.Where(p => p.Peso > media)
+            //    .OrderBy(p => p.OrdemNoTexto)
+            //    .Select(t => t.Texto));
+            //return texto;
+            return "";
         }
 
         public string LerArquivoPdf(HttpPostedFileBase arquivo)
@@ -76,7 +87,10 @@ namespace Resiliens.Controllers
 
         private string ExtrairComarcaDaPeticao(string textoPeticao)
         {
-            throw new NotImplementedException();
+            Regex regex = new Regex(@"COMARCA DE [A-Z][A-ZÁÉÍÓÚÂÊÎÔÛÃÕÇ\/ ]{3,}[A-Z]");
+            Match match = regex.Match(textoPeticao);
+
+            return match.Value.Replace("COMARCA DE ", "");
         }
 
         private string ExtrairCnpjRequeridoDaPeticao(string textoPeticao)

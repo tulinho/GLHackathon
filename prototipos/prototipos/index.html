@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Resiliens</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <style>
+    .btn{        
+        white-space:normal !important;
+        word-wrap: break-word; 
+        max-width: 45%;
+    }
+    .btn-success{
+        background-color: #ea7317;
+        border-color: #ea7317;
+    }
+    .row{
+        margin-top: 5px;
+    }
+    .header{            
+        height: 60px;
+        background: #ea7317;
+        color: white;
+        margin-bottom: 20px;
+    }
+    .title{
+        width: 74%;
+        margin: 0px auto;
+    }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <div class="header">
+            <div class="title">
+                <h1>Resiliens</h1>
+            </div>
+        </div>
+        <div class="body">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="">Área</label>
+                        <div class="input-group">
+                            <select name="area" id="area" class="form-control">
+                                <option value="1">CÍVEL</option>
+                                <option value="2">TRABALHISTA</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="">Comarca</label>
+                        <div class="input-group">
+                            <select name="" id="comarca" class="form-control">
+                                <option value="1">BELO HORIZONTE/MG</option>
+                                <option value="2">SÃO PAULO/SP</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="">Vara</label>
+                        <div class="input-group">
+                            <select name="" id="vara" class="form-control">
+                                <option value="">13º</option>
+                                <option value="">1º</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="">Competência</label>
+                        <div class="input-group">
+                            <select name="" id="competencia" class="form-control">
+                                <option value="">JUSTIÇA COMUM</option>
+                                <option value="">JUIZADO ESPECIAL</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="">Requerente</label>
+                        <input type="text" class="form-control" value="LUCIANA JARDINS MAIA">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="">Requerido</label>
+                        <input type="text" class="form-control" value="SAMSUNG S/A">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="">CPF</label>
+                        <input type="text" class="form-control" value="083.486.854-14">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="">CNPJ</label>
+                        <input type="text" class="form-control" value="23.175.968/0001-36">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-8">
+                        <label for="">Tipo de Ação</label>
+                        <input name="" id="tipo-acao" class="form-control" value="AÇÃO DE COBRANÇA">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="">Valor da causa</label>
+                        <input name="" id="valor-causa" class="form-control" value="R$ 60.000,00">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label for="">Pedidos</label>
+                        <textarea class="form-control" name="" id="" cols="150" rows="6">
+a) a citação do Requerido, para que apresente resposta, no prazo legal, sob pena de revelia; 
+b) Seja julgado procedente o pedido para decretar o despejo do Requerido, bem como DECLARAR a rescisão contratual, fixando-lhe o prazo legal para desocupação voluntária; 
+c) Seja o Requerido condenado no pagamento das custas e honorários de sucumbência no importe de 20% da condenação. 
+                        </textarea>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-5">
+                        <span><button class="btn btn-success"  data-toggle="modal" data-target="#exampleModal">Solicitar documentação ao cliente</button>
+                        </span><span><button class="btn btn-success">Buscar modelos de contestação</button></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="exampleModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header btn-success">
+                    <h5 class="modal-title">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Modal body text goes here.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

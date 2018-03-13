@@ -1,12 +1,68 @@
-﻿<head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-</head>
+﻿
+@{ Layout = "~/Views/Shared/_Layout.cshtml"; }
 
 <div class="row">
-    <div class="row-form">
+    <div class="col-md-12">
+        <h3>Selecione um ou mais arquivos</h3>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
         <form method="post" action="@Url.Action("SubmeterPdf", "Home")" enctype="multipart/form-data">
-            <input type="file" id="arquivo" name="arquivo" />
-            <input type="submit" />
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Subir</span>
+                        </div>
+                        <div class="custom-file">
+                            <input data-preview-file-type="text" type="file" class="custom-file-input"
+                                   onchange="setarNomeArquivo(this)" id="arquivo-peticao" name="arquivo" multiple accept=".pdf">
+                            <label class="custom-file-label" for="arquivo-peticao">Escolher</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <button class="btn btn-success">
+                        Enviar
+                    </button>
+                </div>
+            </div>
+
         </form>
     </div>
-</div>>
+</div>
+
+<script>
+
+    //$(document).ready(function () {
+
+    //    //$("input[type=file]").change(function () {
+
+    //    //    var fieldVal = $(this).val();
+
+    //    //    // Change the node's value by removing the fake path (Chrome)
+    //    //    fieldVal = fieldVal.replace("C:\\fakepath\\", "");
+
+    //    //    if (fieldVal != undefined || fieldVal != "") {
+    //    //        $(this).next(".custom-file-control").attr('data-content', fieldVal);
+    //    //    }
+
+    //    //});
+
+    //});
+
+    function setarNomeArquivo(elem) {
+        if (elem.files.length <= 0)
+            return;
+        let arquivos = '';
+        for (let contador = 0; contador < elem.files.length; contador++) {
+            arquivos += elem.files[contador].name + '; ';
+        }
+        if (arquivos.length > 100) {
+            arquivos = arquivos.substring(0, Math.min(100, arquivos.length)) + '...';
+        }
+        $(elem).next(".custom-file-label").text(arquivos);
+    }
+</script>
