@@ -28,7 +28,9 @@ namespace Resiliens.Controllers
 
         public string SubmeterPdf(HttpPostedFileBase[] arquivo)
         {
-            //string textoPeticao = LerArquivoPdf(arquivo);
+            string textoPeticao = LerArquivoPdf(arquivo[0]);
+            Peticao peticao = ProcessarPeticao(textoPeticao);
+            EnviarEmailNotificacao(peticao);
             //if (processador == null)
             //    processador = new ProcessadorDeTexto(textoPeticao);
             //else
@@ -216,7 +218,17 @@ namespace Resiliens.Controllers
         {
             string corpoEmail = ObterCorpoEmail();
             Colaborador colaborador = ObterColaboradorResponsavel(peticao.NaturezaAcao);
-            corpoEmail = String.Format(corpoEmail, colaborador.Nome, DateTime.Now, peticao.NaturezaAcao, peticao.Reclamante, peticao.NaturezaProcesso, peticao.Requerido, peticao.Foro, peticao.Comarca);
+            corpoEmail = corpoEmail.Replace("<<<NomeColaborador>>>", colaborador.Nome)
+                .Replace("<<<DataProcessamento>>>", DateTime.Now.ToShortDateString())
+                .Replace("<<<NaturezaAcao>>>", peticao.NaturezaAcao)
+                .Replace("<<<Reclamante>>>", peticao.Reclamante)
+                .Replace("<<<NaturezaProcesso>>>", peticao.NaturezaProcesso)
+                .Replace("<<<Requerido>>>", peticao.Requerido)
+                .Replace("<<<Foro>>>", peticao.Foro)
+                .Replace("<<<Comarca>>>", peticao.Comarca);
+
+            EmailRepositorio emailRepositorio = new EmailRepositorio();
+            emailRepositorio.EnviarEmail("Teste assunto", "raquini@gmail.com", "resiliensteste@gmail.com", "resiliensteste@gmail.com", corpoEmail, true);
         }
 
         private string ObterCorpoEmail()
@@ -243,10 +255,10 @@ tr:nth-child(even) {
 </style>
 </head>
 
-Prezado(a) {0},
+Prezado(a) <<<NomeColaborador>>>,
 <br>
 <br>
-A seguinte petição foi processada em {1}, classificada como {2}, e requer sua análise:
+A seguinte petição foi processada em <<<DataProcessamento>>>, classificada como <<<NaturezaAcao>>>, e requer sua análise:
 <br>
 <br>
 <table>
@@ -258,11 +270,11 @@ A seguinte petição foi processada em {1}, classificada como {2}, e requer sua 
         <th>Comarca</th>
     </tr>
     <tr>
-        <td>{3}</td>
-        <td>{4}</td>
-        <td>{5}</td>
-        <td>{6}</td>
-        <td>{7}</td>
+        <td><<<Reclamante>>></td>
+        <td><<<NaturezaProcesso>>></td>
+        <td><<<Requerido>>></td>
+        <td><<<Foro>>></td>
+        <td><<<Comarca>>></td>
     </tr>
 </table>
 <br>
@@ -281,7 +293,7 @@ Análise de documentos
 
         private Colaborador ObterColaboradorResponsavel(string naturezaAcao)
         {
-            throw new NotImplementedException();
+            return new Colaborador() { Email = "raquini@gmail.com", Nome = "Raphael" };
         }
     }
 }
