@@ -5,12 +5,12 @@
     padding-right: 15px;
 }
 
-.btn-success {
-    background-color: #ea7317;
-    border-color: #ea7317;
+.btn-success, .btn-success:active {
+    background-color: #ea7317 !important;
+    border-color: #ea7317 !important;
 }
 
-    .btn-success:hover, .btn-success:active, .btn-success:focus, .btn-success:visited {
+    .btn-success:hover, .btn-success:focus, .btn-success:visited {
         background-color: #f7af78;
         border-color: #f7af78;
     }

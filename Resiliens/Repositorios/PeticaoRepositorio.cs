@@ -14,16 +14,15 @@ namespace Resiliens.Repositorios
 
         private const string INSERIR = @"
 INSERT INTO peticao (
-cod_peticao, foro, natureza_processo, comarca, reclamante, cpf_reclamante, natureza_acao, requerido
+cod_peticao, natureza_processo, comarca, reclamante, cpf_reclamante, natureza_acao, requerido
 )
 values (
-@cod_peticao, @foro, @natureza_processo, @comarca, @reclamante, @cpf_reclamante, @natureza_acao, @requerido
+@cod_peticao, @natureza_processo, @comarca, @reclamante, @cpf_reclamante, @natureza_acao, @requerido
 )";
 
         private const string LISTAR = @"
 SELECT 
     cod_peticao AS CodigoPeticao, 
-    foro AS Foro, 
     natureza_processo AS NaturezaProcesso, 
     comarca AS Comarca, 
     reclamante AS Reclamante, 
@@ -43,7 +42,6 @@ WHERE
         {
             DynamicParameters parametros = new DynamicParameters();
             parametros.Add("cod_peticao", peticao.CodigoPeticao, System.Data.DbType.AnsiString);
-            parametros.Add("foro", peticao.Foro, System.Data.DbType.AnsiString);
             parametros.Add("natureza_processo", peticao.NaturezaProcesso, System.Data.DbType.AnsiString);
             parametros.Add("comarca", peticao.Comarca, System.Data.DbType.AnsiString);
             parametros.Add("reclamante", peticao.Reclamante, System.Data.DbType.AnsiString);

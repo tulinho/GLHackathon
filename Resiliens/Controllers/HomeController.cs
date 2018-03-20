@@ -26,22 +26,19 @@ namespace Resiliens.Controllers
             return View("Listar");
         }
 
-        public string SubmeterPdf(HttpPostedFileBase[] arquivo)
+        public ActionResult SubmeterPdf(HttpPostedFileBase[] arquivos)
         {
-            string textoPeticao = LerArquivoPdf(arquivo[0]);
-            Peticao peticao = ProcessarPeticao(textoPeticao);
-            EnviarEmailNotificacao(peticao);
-            //if (processador == null)
-            //    processador = new ProcessadorDeTexto(textoPeticao);
-            //else
-            //    processador.Processar(textoPeticao);
-
-            //var media = processador.Paragrafos.Sum(p => p.Peso)/processador.Paragrafos.Count();
-            //string texto = String.Join("<br><br><br>", processador.Paragrafos.Where(p => p.Peso > media)
-            //    .OrderBy(p => p.OrdemNoTexto)
-            //    .Select(t => t.Texto));
-            //return texto;
-            return "";
+            List<Peticao> Peticoes = new List<Peticao>();
+            if (arquivos == null || arquivos.Length == 0)
+                return RedirectToAction("Index");
+            foreach(var arquivo in arquivos)
+            {
+                string textoPeticao = LerArquivoPdf(arquivo);
+                Peticoes.Add(new Peticao(textoPeticao));
+            }
+            Peticoes.ForEach(peticao => EnviarEmailNotificacao(peticao));
+            
+            return View("ExibirPeticoes", Peticoes);
         }
 
         public string LerArquivoPdf(HttpPostedFileBase arquivo)
@@ -66,145 +63,9 @@ namespace Resiliens.Controllers
 
         private Peticao ProcessarPeticao(string textoPeticao)
         {
-            Peticao peticao = new Peticao();
-            peticao.CpfReclamante = ExtrairCpfReclamanteDaPeticao(textoPeticao);
-            peticao.Comarca = ExtrairComarcaDaPeticao(textoPeticao);
-            peticao.CnpjRequerido = ExtrairCnpjRequeridoDaPeticao(textoPeticao);
-            peticao.Foro = ExtrairForoDaPeticao(textoPeticao);
-            peticao.NaturezaAcao = ExtrairNaturezaAcaoDaPeticao(textoPeticao);
-            peticao.NaturezaProcesso = ExtrairNaturezaProcessoDaPeticao(textoPeticao);
-            peticao.Reclamante = ExtrairReclamanteDaPeticao(textoPeticao);
-            peticao.Requerido = ExtrairRequeridoDaPeticao(textoPeticao);
+            Peticao peticao = new Peticao(textoPeticao);
 
             return peticao;
-        }
-
-        private string ExtrairCpfReclamanteDaPeticao(string textoPeticao)
-        {
-            Regex regex = new Regex(@"[0-9]{3}.[0-9]{3}.[0-9]{3}-[0-9]{2}");
-            Match match = regex.Match(textoPeticao);
-
-            return match.Value;
-        }
-
-        private string ExtrairComarcaDaPeticao(string textoPeticao)
-        {
-            Regex regex = new Regex(@"COMARCA DE [A-Z][A-ZÁÉÍÓÚÂÊÎÔÛÃÕÇ\/ ]{3,}[A-Z]");
-            Match match = regex.Match(textoPeticao);
-
-            return match.Value.Replace("COMARCA DE ", "");
-        }
-
-        private string ExtrairCnpjRequeridoDaPeticao(string textoPeticao)
-        {
-            Regex regex = new Regex(@"[0-9]{2}.[0-9]{3}.[0-9]{3}\/[0-9]{4}-[0-9]{2}");
-            Match match = regex.Match(textoPeticao);
-
-            return match.Value;
-        }
-
-        private string ExtrairForoDaPeticao(string textoPeticao)
-        {
-            Regex regex = new Regex(@"[A-Z][A-ZÁÉÍÓÚÂÊÎÔÛÃÕÇ\/ ]{3,}");
-            Match match = regex.Match(textoPeticao);
-            if (string.IsNullOrWhiteSpace(match.Value))
-            {
-                regex = new Regex(@"[A-Z][A-ZÁÉÍÓÚÂÊÎÔÛÃÕÇ\/ ]+S\/A");
-                match = regex.Match(textoPeticao);
-            }
-            if (string.IsNullOrWhiteSpace(match.Value))
-            {
-                regex = new Regex(@"[A-Z][A-ZÁÉÍÓÚÂÊÎÔÛÃÕÇ\/ ]+SA");
-                match = regex.Match(textoPeticao);
-            }
-            if (string.IsNullOrWhiteSpace(match.Value))
-            {
-                regex = new Regex(@"[A-Z][A-ZÁÉÍÓÚÂÊÎÔÛÃÕÇ\/ ]+LTDA");
-                match = regex.Match(textoPeticao);
-            }
-            if (string.IsNullOrWhiteSpace(match.Value))
-            {
-                regex = new Regex(@"[A-Z][A-ZÁÉÍÓÚÂÊÎÔÛÃÕÇ\/ ]+ME");
-                match = regex.Match(textoPeticao);
-            }
-            if (string.IsNullOrWhiteSpace(match.Value))
-            {
-                regex = new Regex(@"[A-Z][A-ZÁÉÍÓÚÂÊÎÔÛÃÕÇ\/ ]+EPP");
-                match = regex.Match(textoPeticao);
-            }
-
-            return match.Value;
-        }
-
-        private string ExtrairNaturezaAcaoDaPeticao(string textoPeticao)
-        {
-            Regex regex = new Regex(@"AÇÃO [A-Z][A-ZÁÉÍÓÚÂÊÎÔÛÃÕÇ\/ ]{3,}[A-Z]");
-            Match match = regex.Match(textoPeticao);
-            if (string.IsNullOrWhiteSpace(match.Value))
-            {
-                regex = new Regex(@"[A-Z][A-ZÁÉÍÓÚÂÊÎÔÛÃÕÇ\/ ]+DANOS[A-ZÁÉÍÓÚÂÊÎÔÛÃÕÇ\/ ]{3,}[A-Z]");
-                match = regex.Match(textoPeticao);
-            }
-            if (string.IsNullOrWhiteSpace(match.Value))
-            {
-                regex = new Regex(@"..."); //TODO: adicionar mais padrões
-                match = regex.Match(textoPeticao);
-            }
-
-            return match.Value;
-        }
-
-        private string ExtrairNaturezaProcessoDaPeticao(string textoPeticao)
-        {
-            return string.Empty; //TODO: pendente implementação
-        }
-
-        private string ExtrairReclamanteDaPeticao(string textoPeticao)
-        {
-            return string.Empty; //TODO: pendente implementação
-        }
-
-        private string ExtrairRequeridoDaPeticao(string textoPeticao)
-        {
-            Regex regex = new Regex(@"[A-Z][A-ZÁÉÍÓÚÂÊÎÔÛÃÕÇ\/ ]+S\/A");
-            Match match = regex.Match(textoPeticao);
-            if (string.IsNullOrWhiteSpace(match.Value))
-            {
-                regex = new Regex(@"[A-Z][A-ZÁÉÍÓÚÂÊÎÔÛÃÕÇ\/ ]+SA");
-                match = regex.Match(textoPeticao);
-            }
-            if (string.IsNullOrWhiteSpace(match.Value))
-            {
-                regex = new Regex(@"[A-Z][A-ZÁÉÍÓÚÂÊÎÔÛÃÕÇ\/ ]+LTDA");
-                match = regex.Match(textoPeticao);
-            }
-            if (string.IsNullOrWhiteSpace(match.Value))
-            {
-                regex = new Regex(@"[A-Z][A-ZÁÉÍÓÚÂÊÎÔÛÃÕÇ\/ ]+ME");
-                match = regex.Match(textoPeticao);
-            }
-            if (string.IsNullOrWhiteSpace(match.Value))
-            {
-                regex = new Regex(@"[A-Z][A-ZÁÉÍÓÚÂÊÎÔÛÃÕÇ\/ ]+EPP");
-                match = regex.Match(textoPeticao);
-            }
-            if (string.IsNullOrWhiteSpace(match.Value))
-            {
-                regex = new Regex(@"em face de [A-Z][A-ZÁÉÍÓÚÂÊÎÔÛÃÕÇ\/ ]+");
-                match = regex.Match(textoPeticao);
-            }
-            if (string.IsNullOrWhiteSpace(match.Value))
-            {
-                regex = new Regex(@"em desfavor de [A-Z][A-ZÁÉÍÓÚÂÊÎÔÛÃÕÇ\/ ]+");
-                match = regex.Match(textoPeticao);
-            }
-            if (string.IsNullOrWhiteSpace(match.Value))
-            {
-                regex = new Regex(@"em contende com [A-Z][A-ZÁÉÍÓÚÂÊÎÔÛÃÕÇ\/ ]+");
-                match = regex.Match(textoPeticao);
-            }
-
-            return match.Value;
         }
 
         private void SalvarPeticao(Peticao peticao)
@@ -224,7 +85,6 @@ namespace Resiliens.Controllers
                 .Replace("<<<Reclamante>>>", peticao.Reclamante)
                 .Replace("<<<NaturezaProcesso>>>", peticao.NaturezaProcesso)
                 .Replace("<<<Requerido>>>", peticao.Requerido)
-                .Replace("<<<Foro>>>", peticao.Foro)
                 .Replace("<<<Comarca>>>", peticao.Comarca);
 
             EmailRepositorio emailRepositorio = new EmailRepositorio();
@@ -266,14 +126,12 @@ A seguinte petição foi processada em <<<DataProcessamento>>>, classificada com
         <th>Reclamante</th>
         <th>Natureza Processo</th>
         <th>Requerido</th>
-        <th>Foro</th>
         <th>Comarca</th>
     </tr>
     <tr>
         <td><<<Reclamante>>></td>
         <td><<<NaturezaProcesso>>></td>
         <td><<<Requerido>>></td>
-        <td><<<Foro>>></td>
         <td><<<Comarca>>></td>
     </tr>
 </table>

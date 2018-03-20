@@ -241,7 +241,7 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Listar.cshtml" />
-    <Content Include="Views\Home\SubmeterPdf.cshtml" />
+    <Content Include="Views\Home\ExibirPeticoes.cshtml" />
     <Content Include="Scripts\umd\popper.min.js.map" />
     <Content Include="Scripts\umd\popper.js.map" />
     <Content Include="Scripts\umd\popper-utils.min.js.map" />
