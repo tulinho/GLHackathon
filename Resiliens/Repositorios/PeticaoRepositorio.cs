@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Resiliens.Dto;
 using Resiliens.Entidades;
 using System;
 using System.Collections.Generic;
@@ -31,9 +32,6 @@ SELECT
     requerido AS Requerido
 FROM 
     peticao
-WHERE
-    1=1 AND
-    {0}
 ";
 
         #endregion
@@ -55,14 +53,11 @@ WHERE
             }
         }
 
-        public List<Peticao> Listar()
+        public List<PeticaoDto> Listar()
         {
-            using (SqlConnection conn = new SqlConnection())
+            using (SqlConnection conn = new SqlConnection(System.Configuration.ConfigurationManager.ConnectionStrings["Resiliens"].ToString()))
             {
-                conn.ConnectionString = "Server=localhost;Database=GLHackathon;";
-                conn.Open();
-
-                return conn.Query<Peticao>(LISTAR).ToList<Peticao>();
+                return conn.Query<PeticaoDto>(LISTAR).ToList();
             }
         }
     }

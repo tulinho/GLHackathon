@@ -1,5 +1,6 @@
 ﻿using iTextSharp.text.pdf;
 using iTextSharp.text.pdf.parser;
+using Resiliens.Dto;
 using Resiliens.Entidades;
 using Resiliens.Models;
 using Resiliens.Repositorios;
@@ -23,7 +24,14 @@ namespace Resiliens.Controllers
 
         public ActionResult Listar()
         {
-            return View("Listar");
+            List<PeticaoDto> peticoes = ObterListaPeticoesCadastradas();
+            return View("Listar", peticoes);
+        }
+
+        private List<PeticaoDto> ObterListaPeticoesCadastradas()
+        {
+            PeticaoRepositorio repositorio = new PeticaoRepositorio();
+            return repositorio.Listar();
         }
 
         public ActionResult SubmeterPdf(HttpPostedFileBase[] arquivos)
@@ -36,7 +44,7 @@ namespace Resiliens.Controllers
                 string textoPeticao = LerArquivoPdf(arquivo);
                 Peticoes.Add(new Peticao(textoPeticao));
             }
-            Peticoes.ForEach(peticao => EnviarEmailNotificacao(peticao));
+            Peticoes.ForEach(peticao => { SalvarPeticao(peticao); EnviarEmailNotificacao(peticao); });
             
             return View("ExibirPeticoes", Peticoes);
         }
@@ -88,7 +96,7 @@ namespace Resiliens.Controllers
                 .Replace("<<<Comarca>>>", peticao.Comarca);
 
             EmailRepositorio emailRepositorio = new EmailRepositorio();
-            emailRepositorio.EnviarEmail("Teste assunto", "raquini@gmail.com", "resiliensteste@gmail.com", "resiliensteste@gmail.com", corpoEmail, true);
+            emailRepositorio.EnviarEmail("Teste assunto", "raquini@gmail.com", colaborador.Email, "resiliensteste@gmail.com", corpoEmail, true);
         }
 
         private string ObterCorpoEmail()
@@ -151,7 +159,13 @@ Análise de documentos
 
         private Colaborador ObterColaboradorResponsavel(string naturezaAcao)
         {
-            return new Colaborador() { Email = "raquini@gmail.com", Nome = "Raphael" };
+            switch (naturezaAcao.ToUpper().Trim())
+            {
+                case "CIVEL":
+                    return new Colaborador() { Email = "raquini@gmail.com", Nome = "Raphael" };
+                default:
+                    return new Colaborador() { Email = "raquini@gmail.com", Nome = "Raphael" };
+            }
         }
     }
 }
