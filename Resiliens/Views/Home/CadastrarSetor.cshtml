@@ -1,0 +1,43 @@
+﻿@model List<Resiliens.Entidades.Peticao>
+
+@{ Layout = "~/Views/Shared/_Layout.cshtml"; }
+<form>
+    <div class="form-group">
+        <label for="nomeSetor">Setor</label>
+        <input type="text" class="form-control" id="nomeSetor" />
+    </div>
+    <div class="form-row" style="margin-bottom:1rem;">
+        <div class="col-md-5">
+            <label for="nomeResponsavel">Responsável</label>
+            <input type="text" class="form-control" id="nomeResponsavel" />
+        </div>
+        <div class="col-md-5">
+            <label for="emailResponsavel">E-mail</label>
+            <input type="text" class="form-control" id="emailResponsavel" />
+        </div>
+        <div class="col-md-2">
+            <label for="botaoAdicionar">&nbsp;</label>
+            <button class="btn btn-success form-control" id="botaoAdicionar">Adicionar</button>
+        </div>
+    </div>
+    <div class="form-row" style="margin-bottom:1rem;">
+        <div class="col">
+            <label for="comarca">Comarca</label>
+            <select id="comarca" class="form-control">
+                <option selected>Selecione uma opção...</option>
+            </select>
+        </div>
+        <div class="col">
+            <label for="naturezaAcao">Natureza da ação</label>
+            <select id="naturezaAcao " class="form-control">
+                <option selected>Selecione uma opção...</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-row" style="margin-bottom:1rem;">
+        <button type="submit" class="btn btn-success">
+            Salvar
+        </button>
+        <a href="@Url.Action("Index", "Home")" class="btn btn-success" style="float:right">Voltar</a>
+    </div>
+</form>

@@ -28,6 +28,11 @@ namespace Resiliens.Controllers
             return View("Listar", peticoes);
         }
 
+        public ActionResult CadastrarSetor()
+        {
+            return View();
+        }
+
         private List<PeticaoDto> ObterListaPeticoesCadastradas()
         {
             PeticaoRepositorio repositorio = new PeticaoRepositorio();
